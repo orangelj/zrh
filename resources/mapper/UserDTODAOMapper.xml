@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "http://mybatis.org/dtd/mybatis-3-mapper.dtd" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.dao.UserDTODAO">
+
+    <select id="selectAll" resultType="UserDTO">
+        select city as name,count(*) as value from c_user group by city
+    </select>
+
+</mapper>

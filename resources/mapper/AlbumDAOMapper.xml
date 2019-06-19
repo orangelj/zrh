@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "http://mybatis.org/dtd/mybatis-3-mapper.dtd" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.dao.AlbumDAO">
+
+    <resultMap id="ug" type="Album">
+            <id column="uid" property="id"/>
+            <result column="utitle" property="title"/>
+            <result column="uscore" property="score"/>
+            <result column="uauthor" property="author"/>
+            <result column="uimg_path" property="img_path"/>
+            <result column="ubeam" property="beam"/>
+            <result column="ucount" property="count"/>
+            <result column="ucontent" property="content"/>
+            <!--<result column="upub_date" property="pub_date"/>-->
+        <collection property="children" ofType="Chapter">
+            <id column="gid" property="id"/>
+            <result column="gtitle" property="title"/>
+            <result column="gsize" property="size"/>
+            <result column="gurl" property="url"/>
+            <result column="gduration" property="duration"/>
+            <result column="gpub_date" property="pub_date"/>
+        </collection>
+    </resultMap>
+    <!--查询所有  分页-->
+    <select id="selectAll" resultMap="ug">
+        select u.id uid,u.title utitle,u.score uscore,u.author uauthor,u.img_path uimg_path,u.beam ubeam,u.count ucount,u.content ucontent,
+               g.id gid,g.title gtitle,g.size gsize,g.url gurl,g.duration gduration,g.pub_date gpub_date
+        from c_album u
+        left join c_chapter g
+        on u.id = g.Album_id
+        limit #{page},#{rows}
+    </select>
+
+    <!--查询总条数-->
+    <select id="total" resultType="java.lang.Integer">
+        select count(*) from c_album
+    </select>
+
+    <!--添加专辑-->
+    <insert id="addAlbum">
+        insert into c_album values(#{id},#{title},#{score},#{author},#{img_path},#{beam},#{count},#{content},#{pub_date})
+    </insert>
+    <!--添加章节-->
+    <insert id="addChapter">
+        insert into c_chapter values(#{id},#{title},#{size},#{url},#{duration},sysdate(),#{Album_id})
+    </insert>
+    <!--下载音频-->
+    <select id="download" resultType="Chapter">
+        select * from c_chapter where id = #{id}
+    </select>
+    <!--在线播放-->
+    <select id="onPlay" resultType="Chapter">
+        select * from c_chapter where id = #{id}
+    </select>
+
+
+    <!--App页面-->
+    <select id="selectAllByTime" resultType="Album">
+        select * from c_album limit 5;
+    </select>
+    <select id="selectBySelf" resultType="Album">
+        select * from c_album where id = #{id}
+    </select>
+    <select id="selectByChapter" resultType="Chapter">
+        select * from c_chapter where id = #{id}
+    </select>
+
+</mapper>

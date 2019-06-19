@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "http://mybatis.org/dtd/mybatis-3-mapper.dtd" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.dao.GuruDAO">
+
+    <!--查询所有  分页-->
+    <select id="selectAll" resultType="Guru">
+        select id,legal_name,head_img,status,reg_date
+        from c_guru limit #{page},#{rows}
+    </select>
+
+    <!--查询总条数-->
+    <select id="total" resultType="java.lang.Integer">
+        select count(*) from c_guru
+    </select>
+
+    <!--修改状态-->
+    <update id="updateStatus">
+        update c_guru
+        <set>
+            <if test="status!=null">
+                status = #{status}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

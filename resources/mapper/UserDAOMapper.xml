@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "http://mybatis.org/dtd/mybatis-3-mapper.dtd" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.dao.UserDAO">
+
+    <resultMap id="ug" type="User">
+            <id column="uid" property="id"/>
+            <result column="uphone" property="phone"/>
+            <result column="upassword" property="password"/>
+            <result column="usalt" property="salt"/>
+            <result column="uhead_img" property="head_img"/>
+            <result column="uname" property="name"/>
+            <result column="ulegal_name" property="legal_name"/>
+            <result column="usex" property="sex"/>
+            <result column="ucity" property="city"/>
+            <result column="usign" property="sign"/>
+            <result column="ustatus" property="status"/>
+            <result column="ureg_data" property="reg_data"/>
+        <association property="guru" javaType="Guru">
+            <id column="gid" property="id"/>
+            <result column="glegal_name" property="legal_name"/>
+        </association>
+    </resultMap>
+    <!--查询所有  分页-->
+    <select id="selectAll" resultMap="ug">
+        select u.id uid,u.phone uphone,u.password upassword,u.salt usalt,u.head_img uhead_img,u.name uname,u.legal_name ulegal_name,u.sex usex,u.city ucity,u.sign usign,u.status ustatus,u.reg_data ureg_data,
+               g.id gid,g.legal_name glegal_name
+        from c_user u
+        join c_guru g
+        on u.Guru_id = g.id
+        limit #{page},#{rows}
+    </select>
+
+    <!--查询总条数-->
+    <select id="total" resultType="java.lang.Integer">
+        select count(*) from c_user
+    </select>
+
+    <!--修改状态-->
+    <update id="updateByStatus">
+        update c_user set status = #{status} where id = #{id}
+    </update>
+
+</mapper>

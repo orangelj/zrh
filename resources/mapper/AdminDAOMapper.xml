@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "http://mybatis.org/dtd/mybatis-3-mapper.dtd" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.dao.AdminDAO">
+
+    <!--根据  用户名密码 查询-->
+    <select id="selectByUsernameAndPassword" resultType="Admin">
+        select id,username,password
+        from c_admin where username=#{username} and password=#{password}
+    </select>
+
+    <!--修改密码-->
+    <update id="updateByPassword">
+        update c_admin
+        <set>
+            <if test="password!=null">
+                password = #{password}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--插入-->
+    <insert id="insert">
+        insert into c_admin values(#{id},#{username},#{password})
+    </insert>
+
+    <select id="total" resultType="java.lang.Integer">
+        select count(*) from c_admin
+    </select>
+</mapper>

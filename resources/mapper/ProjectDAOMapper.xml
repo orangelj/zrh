@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "http://mybatis.org/dtd/mybatis-3-mapper.dtd" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.dao.ProjectDAO">
+
+    <resultMap id="ug" type="Project">
+        <id column="pid" property="id"/>
+        <result column="pname" property="name"/>
+        <result column="pstatus" property="status"/>
+        <result column="phot" property="hot"/>
+        <result column="ppower" property="power"/>
+        <result column="pwater" property="water"/>
+        <result column="pflow" property="flow"/>
+        <result column="ppro_date" property="pro_date"/>
+        <collection property="childern" ofType="Banner">
+            <id column="bid" property="id"/>
+            <result column="btitle" property="title"/>
+            <result column="bimg_path" property="img_path"/>
+            <result column="bstatus" property="status"/>
+            <result column="bpub_date" property="pub_date"/>
+            <result column="bdescription" property="description"/>
+        </collection>
+    </resultMap>
+    <!--查询所有  分页-->
+    <select id="selectAll" resultMap="ug">
+        select p.id pid,p.name pname,p.status pstatus,p.hot phot,p.power ppower,p.water pwater,p.flow pflow,p.pro_date ppro_date,
+        b.id bid,b.title btitle,b.img_path bimg_path,b.status bstatus,b.pub_date bpub_date,b.description bdescription
+        from c_project p
+        join c_banner b
+        on p.id = b.project_id
+        limit #{page},#{rows}
+    </select>
+
+    <!--查询总条数-->
+    <select id="total" resultType="java.lang.Integer">
+        select count(*) from c_project
+    </select>
+
+    <!--修改状态-->
+    <update id="updateStatus">
+        update c_project
+        <set>
+            <if test="status!=null">
+                status = #{status}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--插入-->
+    <insert id="insert">
+        insert into c_project values(#{id},#{name},#{status},#{hot},#{power},#{water},#{flow},sysdate())
+    </insert>
+
+    <!--删除-->
+    <delete id="delete">
+        delete from c_project where id = #{id}
+    </delete>
+
+    <select id="selectByStatus" resultType="Project">
+        select * from c_project limit 5;
+    </select>
+</mapper>

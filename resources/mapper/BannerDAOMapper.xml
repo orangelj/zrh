@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "http://mybatis.org/dtd/mybatis-3-mapper.dtd" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.dao.BannerDAO">
+
+    <!--查询所有  分页-->
+    <select id="selectAll" resultType="Banner">
+        select id,title,img_path,status,pub_date,description
+        from c_banner limit #{page},#{rows}
+    </select>
+
+    <!--查询总条数-->
+    <select id="total" resultType="java.lang.Integer">
+        select count(*) from c_banner
+    </select>
+
+    <!--修改状态-->
+    <update id="updateStatus">
+        update c_banner
+        <set>
+            <if test="status!=null">
+                status = #{status}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--插入-->
+    <insert id="insert">
+        insert into c_banner values(#{id},#{title},#{img_path},#{status},sysdate(),#{description})
+    </insert>
+
+    <!--删除-->
+    <delete id="delete">
+        delete from c_banner where id = #{id}
+    </delete>
+
+    <select id="selectByStatus" resultType="Banner">
+        select * from c_banner limit 5;
+    </select>
+</mapper>
